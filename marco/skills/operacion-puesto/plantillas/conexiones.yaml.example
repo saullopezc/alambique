@@ -1,0 +1,66 @@
+# conexiones.yaml — metadatos operativos de los destinos remotos
+#
+# Clasificación: C2. El fichero REAL nunca se versiona. Este .example sí.
+# Responsable: <quien responde>
+#
+# REGLA DE DISEÑO, y es la que hace que el fichero sea seguro de tener:
+#   este fichero NO permite conectarse a nada. No guarda dirección, ni usuario,
+#   ni puerto, ni credencial. Solo guarda CÓMO SE LLAMA cada destino y CÓMO HAY
+#   QUE TRATARLO. La coordenada real vive en ~/.ssh/config, fuera de aquí, y
+#   `ssh_host` es una referencia a una entrada `Host` de ese fichero.
+#   Si alguien se lleva este YAML, no se lleva ningún acceso.
+#
+# Se consume con el resolutor (resolve_alias.sh) y por la cascada de capas:
+#   <proyecto>/_local/  ->  <operacion>/_local/  ->  <cliente>/_local/
+#   ->  <cartera>/_local/  ->  <conf>/_local/
+# (<conf> = directorio de configuración del harness; ver SKILL.md de operacion-puesto)
+# Gana la PRIMERA aparición, campo a campo: lo específico pisa a lo general,
+# nunca al revés.
+#
+# FORMATO: el de este fichero y ninguno más. `conexiones` es una lista de
+# registros `- clave: valor`, con un valor por línea; un `#` dentro de comillas
+# es texto. El resolutor no es un parser de YAML: un mapa por nombre, un valor
+# anidado o una sección que no sea `version` o `conexiones` no se leen, y
+# `resolve_alias.sh --validar` los señala con su número de línea. Un alias no
+# se repite dentro del mismo fichero; en otra capa sí: eso es la cascada.
+
+version: 1
+
+conexiones:
+
+  # --- <alias de la operacion o del cliente> ---
+
+  - alias: cliente-a-prod-app        # str, minúsculas y guiones. Es la clave de búsqueda.
+    ssh_host: cliente-a-prod-app-01  # entrada `Host` de ~/.ssh/config. NI IP NI FQDN.
+    cliente: cliente-a               # alias del cliente. PREGUNTADO, nunca deducido de la ruta.
+    pais: xx                         # código de país de 2 letras
+    entorno: produccion              # produccion | pruebas | desarrollo
+    so: linux                        # familia del SO, no la versión exacta
+    proposito: "nodo de aplicacion"  # texto libre, 3-8 palabras
+    criticidad: alta                 # alta | media | baja
+    modo: solo-lectura               # solo-lectura | escritura-con-aprobacion
+    legado_grep: false               # true si el destino no soporta las opciones modernas de grep
+
+  - alias: cliente-a-salto
+    ssh_host: cliente-a-bastion
+    cliente: cliente-a
+    pais: xx
+    entorno: produccion
+    so: linux
+    proposito: "salto hacia cliente-a-prod-app"
+    criticidad: alta
+    modo: solo-lectura
+    legado_grep: true
+
+# Las diez claves son OBLIGATORIAS en la ficha RESUELTA de cada alias, la que
+# sale de la cascada: una capa más específica puede declarar de un alias solo lo
+# que cambia, y el resto lo pone la general. Si una no se sabe, se pregunta; no
+# se deja en blanco y no se inventa.
+#
+# De las diez, `alias` es la de búsqueda y un mecanismo consume solo otras dos,
+# `ssh_host` y `legado_grep`; el resto,
+# `modo` incluida, informa al agente y a quien revisa: nada lo hace cumplir.
+# `--validar` no comprueba los valores enumerados ni rechaza una clave de más.
+#
+# El universo de destinos suele ser mayor que esta lista: aquí solo entran los
+# que algún control consume. Un destino sin entrada no es un destino sin existir.

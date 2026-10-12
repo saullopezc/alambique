@@ -1,0 +1,43 @@
+# clientes.conf — patrones que identifican a un cliente en un texto
+#
+# Clasificación: C2. El fichero REAL nunca se versiona.
+# Responsable: <quien responde>
+#
+# Una expresión regular extendida por línea, sin distinguir mayúsculas. Líneas
+# vacías y las que empiezan por `#` se ignoran. Lo lee el barrido del marco
+# (`grep -iE`) desde <proyecto>/_local/ o <conf>/_local/.
+#
+# Para marcas que son texto literal y no colisionan con nada basta `marcas.txt`
+# (plantilla en `marco/plantillas/marcas.example.txt`). Si existen los dos, el
+# barrido usa los dos: cada uno con su gramática.
+#
+# POR QUÉ HAY REGEX Y NO SOLO NOMBRES — léelo antes de añadir una entrada:
+#
+# 1. Un nombre de cliente puede ser una palabra corriente del oficio. Si el
+#    cliente se llama como una herramienta, un comando o un concepto técnico,
+#    su token suelto casa en todas partes: el barrido devuelve ruido, dejas de
+#    leerlo, y a partir de ahí no protege de nada. Esas entradas se ANCLAN a
+#    la frase completa o a lo que las acompaña, no al token.
+# 2. Y al revés: un cliente puede aparecer sin que su nombre aparezca —por su
+#    nomenclatura de producto, sus prefijos, sus códigos. Eso no lo atrapa esta
+#    lista: lo atrapa leer. Esta lista es el primer filtro, no el último.
+#
+# Cada alta y cada baja se comenta con su fecha y su motivo. Un patrón que
+#    generó un falso positivo medido se registra, no se borra en silencio.
+
+# --- tokens simples: nombres que no colisionan con vocabulario técnico ---
+# alta YYYY-MM-DD: <motivo>
+nombrecliente
+
+# --- anclados: el token suelto colisiona, hay que exigir el contexto ---
+# alta YYYY-MM-DD: el token suelto casaba con un comando de uso diario;
+#                  medido: N falsos positivos en un solo barrido.
+nombre[[:space:]]+corporativo[[:space:]]+completo
+
+# --- variantes ortográficas: con y sin tilde o eñe, por alternancia explícita ---
+# alta YYYY-MM-DD: la documentación del cliente escribe las dos formas.
+# Cada letra que no es ASCII va escrita en minúscula y en mayúscula dentro de
+# una alternancia `(a|b)`: así casa byte a byte, con cualquier configuración
+# regional. Una clase como `[íÍ]`, o fiarle esas letras a «sin distinguir
+# mayúsculas», solo funciona con una configuración regional UTF-8.
+compa(n|ñ|Ñ)(i|í|Í)a[[:space:]]+ejemplo

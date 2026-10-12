@@ -1,0 +1,44 @@
+# negocio.conf — identidad de quien firma el trabajo
+#
+# Clasificación: C2 (dato personal). El fichero REAL nunca se versiona.
+# Responsable: <quien responde>
+#
+# Destino real:  <conf>/_local/negocio.conf   (o $ALAMBIQUE_NEGOCIO)
+#                (<conf> = directorio de configuración del harness)
+#                El instalador lo escribe si se le responde en una terminal.
+# Otra identidad para un proyecto o un cliente: el mismo fichero en su
+#                `_local/`. Gana el más cercano al fichero que se escribe.
+#
+# Se consume con grep, NUNCA con `source`: es un fichero de datos, no un script.
+# Un `source` sobre un fichero de datos ejecuta lo que tenga dentro.
+#
+# Aquí vive la identidad CONCRETA. La REGLA de que hay que firmar vive en la
+# documentación versionada. Esa separación es el motivo de que este fichero
+# exista: permite que las plantillas públicas lleven un marcador y no un nombre.
+#
+# El nombre se escribe como lo escribe su dueño, con sus tildes o sin ellas. Es
+# un nombre propio, no prosa: se respeta aunque el resto del fichero vaya sin
+# acentos.
+
+# --- identidad documental: la que va en la firma de documentos y cabeceras ---
+# El guard de autoría lee tres claves: `autor_nombre` (el sello del código
+# modificado), `autor_correo` y `firma_doc` (la firma al pie de un documento).
+autor_nombre=<Nombre Apellido>
+autor_correo=<correo@organizacion>
+firma_doc=**Autor**: <Nombre Apellido> <<correo@organizacion>> - <SIGLA> (<Glosa>)
+# INFORMATIVA: no la lee ningún mecanismo. La organización que cuenta para el
+# guard es la que va escrita dentro de `firma_doc`.
+autor_empresa=<SIGLA> (<Glosa completa de la organizacion>)
+
+# --- identidad de git: INFORMATIVA, no la lee ningún mecanismo ---
+# El marco no configura git: `user.name` y `user.email` los pone la persona.
+# Aquí queda apuntado con qué identidad se commitea, que puede diferir de la
+# documental a propósito: el correo de commit es público en cuanto el
+# repositorio sale de la máquina, y separarlo del corporativo es una decisión,
+# no un descuido.
+git_nombre=<nombre-de-usuario>
+git_correo=<correo-publico>
+
+# NO se declara aquí el cliente final. El cliente se pregunta por tarea y vive
+# en la capa que le corresponde; ponerlo en la capa global del puesto es como se
+# acaba filtrando en un artefacto que no era para él.

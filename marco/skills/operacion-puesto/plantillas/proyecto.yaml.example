@@ -1,0 +1,41 @@
+# _local/proyecto.yaml — de quién es este directorio
+#
+# Clasificación: C1. Lleva SOLO ALIAS. Es estado del puesto: vive en _local/ y
+# el fichero REAL no se versiona; este .example sí.
+# Responsable: <quien responde>
+#
+# No contiene ninguna coordenada: los alias se resuelven contra conexiones.yaml
+# de las capas _local de la cascada, y la coordenada vive en ~/.ssh/config.
+# Declara de quién es el directorio; el dueño no se deduce de la ruta, se pregunta.
+#
+# Las claves de primer nivel van SIN sangría: es donde las lee
+# contexto_proyecto.sh. Un valor que sigue siendo un marcador `<...>` cuenta
+# como sin declarar, así que este fichero recién copiado no identifica a nadie.
+#
+# El nivel del cliente es la declaración que lo nombra SIN `proyecto:`: en ese
+# nivel la línea se quita, no se deja con el marcador. Si al cliente solo lo
+# nombra la declaración de un proyecto, contexto_proyecto.sh pide preguntar a
+# qué altura del árbol vive lo común.
+
+proyecto:      <nombre corto>              # se omite en el nivel de cliente u operación
+cliente:       <ALIAS del cliente>         # PREGUNTADO. Nunca deducido del nombre del directorio.
+                                           # Mientras no se sepa: <PREGUNTAR> (cuenta como sin declarar,
+                                           # igual que este marcador si se queda sin rellenar).
+                                           # Si no es de ningún cliente —propio, abierto—: ninguno
+operacion:     <ALIAS de la filial o pais> # solo si el cliente tiene varias
+responsable:   <quien responde>            # una persona identificada, nunca una herramienta
+clasificacion: C1                          # la del nivel en conjunto
+
+servidores:                                # SOLO alias; se resuelven con el resolutor
+  - alias: <alias>
+    rol:   produccion                      # produccion | pruebas | salto
+
+accesos:                                   # cómo se entra, no con qué se entra
+  metodo: ssh-por-salto                    # ssh-por-salto | vpn-y-salto | local
+  nota:   <lo que hay que saber; ni coordenada ni credencial>
+
+stack:        [<tecnologia>, <tecnologia>]
+herramientas: [<lo que hace falta tener instalado>]
+
+skills:                                    # qué cargar al abrir este proyecto (lo lee el agente, no un script)
+  - <skill>

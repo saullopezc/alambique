@@ -1,0 +1,21 @@
+# >>> alambique
+# R-02: todo C2/C3 vive en _local/ y nunca se versiona, en ningún repositorio.
+#
+# ESTE BLOQUE VA AL IGNORE GLOBAL y por eso es mínimo: solo las dos capas del
+# marco. Las reglas sobre credenciales y carpetas de datos (`/data/`, `/qa/`,
+# `*.key`...) van en el `.gitignore` de cada proyecto que se da de alta: puestas
+# aquí cambiarían sin avisar lo que git ve en repositorios ajenos al marco.
+#
+# Se ignora el CONTENIDO (`/**`), NUNCA el directorio a secas: git no permite
+# re-incluir nada dentro de un directorio excluido, así que `_local/` a secas
+# haría imposible conservar el esqueleto con .gitkeep.
+_local/**
+!_local/**/
+!_local/**/.gitkeep
+!_local/README.md
+# Lo que el agente además no debe LEER.
+__restriccion/**
+!__restriccion/**/
+!__restriccion/**/.gitkeep
+!__restriccion/README.md
+# <<< alambique

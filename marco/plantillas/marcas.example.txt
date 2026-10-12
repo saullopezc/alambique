@@ -1,0 +1,26 @@
+# marcas.txt — nombres cuya aparición en algo versionable es una fuga (R-02)
+#
+# Destino real:  <proyecto>/_local/marcas.txt   o   <conf>/_local/marcas.txt
+#                (<conf> = directorio de configuración del harness: $ALAMBIQUE_CONF,
+#                 o el primero que exista de ~/.claude, ~/.codex, ~/.gemini...)
+# NO se versiona. Es C2. Responsable: <quien responde>
+#
+# Una marca comercial identifica al cliente igual que una IP identifica al
+# servidor. Por eso la lista vive aquí y no dentro del barrido: el barrido se
+# publica, esta lista no.
+#
+# Una por línea, en minúsculas. Se usan como texto literal, sin distinguir
+# mayúsculas. Si una marca es una palabra corriente y hace falta exigirle
+# contexto, va como expresión regular en `clientes.conf`, al lado de este
+# fichero (plantilla en la skill `operacion-puesto`). El barrido lee los dos.
+#
+# NO PONGAS AQUÍ EL NOMBRE DE TU PROPIA EMPRESA. Se anonimiza al CLIENTE, no al
+# desarrollador. Tenerlo aquí marca como fuga tu propia firma de autoría en cada
+# fichero que la lleve, y el barrido se vuelve inservible de puro ruido.
+#
+# Sin este fichero el barrido funciona igual, pero solo con patrones generales
+# —IPs, user@host, credenciales—. Es lo que lo convierte de genérico en tuyo.
+
+# <marca-cliente-1>
+# <nombre-del-producto-del-cliente>
+# <dominio-del-cliente.com>

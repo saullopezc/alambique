@@ -1,0 +1,57 @@
+# Lo que cubre el bloque del marco (abajo) no se repite aquí: una regla, un dueño.
+*.previo.*
+/logs/
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.swp
+__pycache__/
+
+# >>> alambique
+# R-02: todo C2/C3 vive en _local/ y nunca se versiona.
+#
+# Se ignora el CONTENIDO (`/**`), NUNCA el directorio a secas: git no permite
+# re-incluir nada dentro de un directorio excluido, así que `_local/` a secas
+# haría imposible conservar el esqueleto con .gitkeep.
+_local/**
+!_local/**/
+!_local/**/.gitkeep
+!_local/README.md
+# Lo que el agente además no debe LEER.
+__restriccion/**
+!__restriccion/**/
+!__restriccion/**/.gitkeep
+!__restriccion/README.md
+# Credenciales: nunca, en ningún caso.
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+id_rsa*
+id_ed25519*
+*credentials*
+!*credentials*.example
+.env
+.env.*
+!.env.example
+# Datos y evidencia de cliente.
+#
+# ANCLADAS con `/` inicial a propósito: sin anclar, `datos/` coincide a
+# cualquier profundidad y excluye también `_local/datos/` — y al excluir el
+# DIRECTORIO, la excepción del .gitkeep de arriba ya no puede alcanzarlo.
+/datos/
+/data/
+/evidencia/
+/evidence/
+/exports/
+/capturas/
+*.dump
+*.sql.gz
+# Memoria de sesión y salidas reales: C2 por construcción, aunque el proyecto
+# sea público. El defecto es no versionarlas.
+/context/
+/qa/
+/audit/
+# <<< alambique
