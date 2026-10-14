@@ -282,6 +282,11 @@ local, o tocando el patrón—. La cabecera de cada script dice con exactitud lo
   fichero que el agente escribe con las herramientas de edición del harness: no el mensaje
   de un commit ni un fichero escrito por redirección; y su lista de formas de atribución
   es de ejemplo.
+- **Las reglas de lectura cubren las herramientas y las órdenes que nombran el fichero.**
+  En Claude Code paran la herramienta de lectura y, en Bash, `cat`, `mv` y similares,
+  también con la ruta en una variable. No paran un subproceso que abre el fichero por su
+  cuenta (`python3 -c`, `bash -c`, un script) ni lo que lee sin nombrarlo (`grep -r`): eso
+  solo lo cierra el sandbox del harness, que el adaptador no activa.
 - **La skill describe una forma de organizar el puesto**, la de quien la escribió: cartera,
   cliente, operación, proyecto, y diez claves por conexión. Es un ejemplo de uso; de esas
   claves los mecanismos solo leen `alias`, `ssh_host` y `legado_grep`; el resto informa.

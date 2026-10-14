@@ -47,8 +47,24 @@
 # escritura que lo cambie se deja copia `.previo.<sello>`. Se escribe a través
 # de un enlace simbólico (sobre su destino) y se conserva el modo del fichero.
 #
+# LO QUE NO VEN LAS REGLAS DE LECTURA. Medido en Claude Code 2.1.269 con un
+# canario en `./__restriccion/`: la regla `Read` deniega también en Bash
+# `cat`, `cat "$VAR/..."` y `mv`; según la documentación del harness, también
+# `head`, `tail`, `sed`, `tee` y las redirecciones. No cubre lo que lee sin
+# nombrar el fichero —`grep -r` desde un directorio padre— ni un subproceso que
+# lo abre por su cuenta —`python3 -c`, un script, `bash -c '...'`—. En la
+# prueba, a los subprocesos los paró el clasificador del modo automático, que no
+# es determinista y solo actúa en ese modo; `grep -r` no devolvió nada, pero no
+# por la regla: allí `grep` era una función de la shell del harness. Una regla
+# `Bash(...)` no cierra el hueco: casa con el texto de la orden, no con lo que
+# lee. El control a nivel de sistema es el sandbox del harness
+# (`sandbox.filesystem.denyRead`), y este adaptador NO lo activa: limita
+# también la escritura y la red de toda orden, y eso lo decide el puesto.
+#
 # Author       : Saul López
 # Created Date : 2026-09-12
+# Modified By  : Saul López
+# Modified Date: 2026-10-14
 
 set -uo pipefail
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
